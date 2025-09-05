@@ -22,14 +22,14 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "Get your driver license the easy way!",
+            "text": "Online driving school",
             "text_style": "body"
           }
         },
         "button": {
           "type": "buttons",
           "settings": {
-            "button_label_1": "Shop all",
+            "button_label_1": "Courses",
             "button_link_1": "shopify://collections/all",
             "button_style_secondary_1": true,
             "button_label_2": "",
