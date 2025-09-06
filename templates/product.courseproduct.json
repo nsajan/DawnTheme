@@ -41,6 +41,23 @@
             "swatch_shape": "circle"
           }
         },
+        "purchase_type": {
+          "type": "purchase_type",
+          "settings": {
+            "label": "Buying for",
+            "option_self": "Myself",
+            "option_other": "Someone else"
+          }
+        },
+        "student_email": {
+          "type": "student_email",
+          "settings": {
+            "label": "Student Email",
+            "placeholder": "Enter student's email address",
+            "error_message": "Please enter a valid email address",
+            "required": true
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -65,6 +82,8 @@
         "caption",
         "price",
         "variant_picker",
+        "purchase_type",
+        "student_email",
         "buy_buttons",
         "description",
         "share"

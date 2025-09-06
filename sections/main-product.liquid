@@ -477,6 +477,310 @@
 
               {%- when 'variant_picker' -%}
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+              {%- when 'purchase_type' -%}
+                <div class="product-form__input" {{ block.shopify_attributes }}>
+                  <label class="form__label">{{ block.settings.label }}</label>
+                  <fieldset class="product-form__input">
+                    <div class="field field--radio-group">
+                      <input
+                        type="radio"
+                        id="PurchaseType-Self-{{ section.id }}"
+                        name="purchase_type_{{ section.id }}"
+                        value="self"
+                        checked
+                        class="purchase-type-radio"
+                      >
+                      <label for="PurchaseType-Self-{{ section.id }}" class="radio__label">
+                        {{ block.settings.option_self }}
+                      </label>
+                    </div>
+                    <div class="field field--radio-group">
+                      <input
+                        type="radio"
+                        id="PurchaseType-Other-{{ section.id }}"
+                        name="purchase_type_{{ section.id }}"
+                        value="other"
+                        class="purchase-type-radio"
+                      >
+                      <label for="PurchaseType-Other-{{ section.id }}" class="radio__label">
+                        {{ block.settings.option_other }}
+                      </label>
+                    </div>
+                  </fieldset>
+                </div>
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                    const selfRadio = document.getElementById('PurchaseType-Self-{{ section.id }}');
+                    const otherRadio = document.getElementById('PurchaseType-Other-{{ section.id }}');
+                    const emailContainer = document.querySelector('[data-student-email-{{ section.id }}]');
+                    const form = document.getElementById('{{ product_form_id }}');
+                    const submitButton = form?.querySelector('[type="submit"][name="add"]');
+                    const dynamicButtons = form?.querySelector('.shopify-payment-button');
+                    
+                    function validateEmail(email) {
+                      const re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                      return re.test(email);
+                    }
+                    
+                    function checkFormValidity() {
+                      if (otherRadio.checked) {
+                        const emailInput = emailContainer?.querySelector('input[type="email"]');
+                        const email = emailInput?.value.trim();
+                        const isValid = email && validateEmail(email);
+                        
+                        if (!isValid) {
+                          // Disable buttons
+                          if (submitButton) {
+                            submitButton.disabled = true;
+                            submitButton.setAttribute('aria-disabled', 'true');
+                          }
+                          if (dynamicButtons) {
+                            dynamicButtons.style.pointerEvents = 'none';
+                            dynamicButtons.style.opacity = '0.5';
+                          }
+                          return false;
+                        }
+                      }
+                      
+                      // Enable buttons
+                      if (submitButton && !submitButton.classList.contains('disabled')) {
+                        submitButton.disabled = false;
+                        submitButton.removeAttribute('aria-disabled');
+                      }
+                      if (dynamicButtons) {
+                        dynamicButtons.style.pointerEvents = '';
+                        dynamicButtons.style.opacity = '';
+                      }
+                      return true;
+                    }
+                    
+                    function toggleEmailField() {
+                      if (emailContainer) {
+                        if (otherRadio.checked) {
+                          emailContainer.style.display = 'block';
+                          const emailInput = emailContainer.querySelector('input[type="email"]');
+                          if (emailInput) {
+                            emailInput.setAttribute('required', 'required');
+                            // Trigger validation check
+                            checkFormValidity();
+                          }
+                        } else {
+                          emailContainer.style.display = 'none';
+                          const emailInput = emailContainer.querySelector('input[type="email"]');
+                          if (emailInput) {
+                            emailInput.removeAttribute('required');
+                            emailInput.value = '';
+                            // Clear any error states
+                            const fieldContainer = emailInput.closest('.field');
+                            const errorDiv = emailContainer.querySelector('.field__message--error');
+                            if (fieldContainer) {
+                              fieldContainer.classList.remove('field--with-error');
+                            }
+                            if (errorDiv) {
+                              errorDiv.style.display = 'none';
+                            }
+                          }
+                          // Re-enable buttons when switching to self
+                          checkFormValidity();
+                        }
+                      }
+                    }
+                    
+                    // Intercept form submission
+                    form?.addEventListener('submit', function(e) {
+                      if (!checkFormValidity()) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        
+                        // Focus and show error on email field
+                        const emailInput = emailContainer?.querySelector('input[type="email"]');
+                        if (emailInput) {
+                          emailInput.focus();
+                          // Trigger the email validation to show error
+                          const event = new Event('blur');
+                          emailInput.dispatchEvent(event);
+                        }
+                        return false;
+                      }
+                    });
+                    
+                    selfRadio?.addEventListener('change', toggleEmailField);
+                    otherRadio?.addEventListener('change', toggleEmailField);
+                    
+                    // Initial state
+                    toggleEmailField();
+                  });
+                </script>
+                <style>
+                  .field--radio-group {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 1rem;
+                    padding: 0;
+                    background: transparent;
+                    box-shadow: none;
+                  }
+                  .field--radio-group:before,
+                  .field--radio-group:after {
+                    display: none;
+                  }
+                  .field--radio-group input[type="radio"] {
+                    width: auto;
+                    height: auto;
+                    margin: 0 0.8rem 0 0;
+                    min-width: auto;
+                    min-height: auto;
+                    padding: 0;
+                  }
+                  .radio__label {
+                    margin: 0;
+                    cursor: pointer;
+                    font-size: 1.4rem;
+                  }
+                  fieldset.product-form__input {
+                    border: none;
+                    padding: 0;
+                    margin: 0 0 2rem 0;
+                  }
+                </style>
+              {%- when 'student_email' -%}
+                <div class="product-form__input" {{ block.shopify_attributes }} data-student-email-{{ section.id }} style="display: none;">
+                  <label class="form__label" for="StudentEmail-{{ section.id }}">
+                    {{ block.settings.label }}
+                    {%- if block.settings.required -%}
+                      <span aria-label="required">*</span>
+                    {%- endif -%}
+                  </label>
+                  <div class="field">
+                    <input
+                      type="email"
+                      id="StudentEmail-{{ section.id }}"
+                      name="properties[Student Email]"
+                      class="field__input"
+                      placeholder="{{ block.settings.placeholder }}"
+                      {% if block.settings.required %}required{% endif %}
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      form="{{ product_form_id }}"
+                      data-error-message="{{ block.settings.error_message }}"
+                    >
+                    <label class="field__label" for="StudentEmail-{{ section.id }}">{{ block.settings.placeholder }}</label>
+                  </div>
+                  <div class="field__message field__message--error" id="StudentEmailError-{{ section.id }}" style="display: none;">
+                    <span class="svg-wrapper">
+                      {{- 'icon-error.svg' | inline_asset_content -}}
+                    </span>
+                    <span>{{ block.settings.error_message }}</span>
+                  </div>
+                </div>
+                <script>
+                  document.addEventListener('DOMContentLoaded', function() {
+                    const emailInput = document.getElementById('StudentEmail-{{ section.id }}');
+                    const errorDiv = document.getElementById('StudentEmailError-{{ section.id }}');
+                    const fieldContainer = emailInput?.closest('.field');
+                    const form = document.getElementById('{{ product_form_id }}');
+                    const otherRadio = document.getElementById('PurchaseType-Other-{{ section.id }}');
+                    const submitButton = form?.querySelector('[type="submit"][name="add"]');
+                    const dynamicButtons = form?.querySelector('.shopify-payment-button');
+                    
+                    function validateEmail(email) {
+                      const re = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                      return re.test(email);
+                    }
+                    
+                    function updateButtonState() {
+                      if (otherRadio?.checked) {
+                        const email = emailInput?.value.trim();
+                        const isValid = email && validateEmail(email);
+                        
+                        if (!isValid) {
+                          // Disable buttons
+                          if (submitButton) {
+                            submitButton.disabled = true;
+                            submitButton.setAttribute('aria-disabled', 'true');
+                          }
+                          if (dynamicButtons) {
+                            dynamicButtons.style.pointerEvents = 'none';
+                            dynamicButtons.style.opacity = '0.5';
+                          }
+                        } else {
+                          // Enable buttons
+                          if (submitButton && !submitButton.classList.contains('disabled')) {
+                            submitButton.disabled = false;
+                            submitButton.removeAttribute('aria-disabled');
+                          }
+                          if (dynamicButtons) {
+                            dynamicButtons.style.pointerEvents = '';
+                            dynamicButtons.style.opacity = '';
+                          }
+                        }
+                      }
+                    }
+                    
+                    function checkEmailValidity() {
+                      const email = emailInput.value.trim();
+                      const isRequired = emailInput.hasAttribute('required');
+                      const isValid = !isRequired || (email && validateEmail(email));
+                      
+                      if (isRequired && !email) {
+                        errorDiv.style.display = 'flex';
+                        fieldContainer?.classList.add('field--with-error');
+                        emailInput.setAttribute('aria-invalid', 'true');
+                        emailInput.setAttribute('aria-describedby', 'StudentEmailError-{{ section.id }}');
+                        errorDiv.querySelector('span:last-child').textContent = 'Email is required when buying for someone else';
+                      } else if (email && !validateEmail(email)) {
+                        errorDiv.style.display = 'flex';
+                        fieldContainer?.classList.add('field--with-error');
+                        emailInput.setAttribute('aria-invalid', 'true');
+                        emailInput.setAttribute('aria-describedby', 'StudentEmailError-{{ section.id }}');
+                        errorDiv.querySelector('span:last-child').textContent = '{{ block.settings.error_message }}';
+                      } else {
+                        errorDiv.style.display = 'none';
+                        fieldContainer?.classList.remove('field--with-error');
+                        emailInput.removeAttribute('aria-invalid');
+                        emailInput.removeAttribute('aria-describedby');
+                      }
+                      
+                      // Update button states whenever email validity changes
+                      updateButtonState();
+                      
+                      return isValid;
+                    }
+                    
+                    emailInput?.addEventListener('blur', checkEmailValidity);
+                    emailInput?.addEventListener('input', function() {
+                      checkEmailValidity();
+                    });
+                    
+                    // Also check validity when email container becomes visible
+                    const observer = new MutationObserver(function(mutations) {
+                      mutations.forEach(function(mutation) {
+                        if (mutation.target.style.display !== 'none') {
+                          setTimeout(checkEmailValidity, 100);
+                        }
+                      });
+                    });
+                    
+                    const emailContainer = document.querySelector('[data-student-email-{{ section.id }}]');
+                    if (emailContainer) {
+                      observer.observe(emailContainer, { attributes: true, attributeFilter: ['style'] });
+                    }
+                  });
+                </script>
+                <style>
+                  .field__message--error {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 0.5rem;
+                    color: rgb(var(--color-foreground));
+                    font-size: 1.3rem;
+                  }
+                  .field__message--error .svg-wrapper {
+                    width: 1.2rem;
+                    height: 1.2rem;
+                    margin-right: 0.5rem;
+                    flex-shrink: 0;
+                  }
+                </style>
               {%- when 'buy_buttons' -%}
                 {%- render 'buy-buttons',
                   block: block,
@@ -904,6 +1208,62 @@
             }
           ],
           "default": "circle"
+        }
+      ]
+    },
+    {
+      "type": "purchase_type",
+      "name": "Purchase Type",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field Label",
+          "default": "Buying for"
+        },
+        {
+          "type": "text",
+          "id": "option_self",
+          "label": "Self Option Label",
+          "default": "Myself"
+        },
+        {
+          "type": "text",
+          "id": "option_other",
+          "label": "Other Option Label",
+          "default": "Someone else"
+        }
+      ]
+    },
+    {
+      "type": "student_email",
+      "name": "Student Email",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field Label",
+          "default": "Student Email"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder Text",
+          "default": "Enter your email address"
+        },
+        {
+          "type": "text",
+          "id": "error_message",
+          "label": "Error Message",
+          "default": "Please enter a valid email address"
+        },
+        {
+          "type": "checkbox",
+          "id": "required",
+          "label": "Required Field",
+          "default": true
         }
       ]
     },

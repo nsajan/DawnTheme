@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Read(C:\\Users\\Sajan_Goel_Nagati\\AppData\\Roaming\\Claude/**)"
+      "Read(C:\\Users\\Sajan_Goel_Nagati\\AppData\\Roaming\\Claude/**)",
+      "Read(//c/**)"
     ],
     "deny": [],
     "ask": []
