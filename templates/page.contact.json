@@ -28,7 +28,9 @@
         "theme_appext_development_quiz_rGDMNT": {
           "type": "shopify://apps/theme-appext-development/blocks/quiz/02c0cde5-0410-4c1d-81d8-966ffa428653",
           "settings": {
-            "quiz_slug": "web-dev-course"
+            "quiz_slug": "web-dev-course",
+            "title": "Driver Academy",
+            "subtitle": "Complete Driver Training"
           }
         }
       },
