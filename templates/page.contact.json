@@ -25,7 +25,7 @@
     "17579589893846d233": {
       "type": "apps",
       "blocks": {
-        "theme_appext_development_quiz_JTayL3": {
+        "theme_appext_development_quiz_rGDMNT": {
           "type": "shopify://apps/theme-appext-development/blocks/quiz/02c0cde5-0410-4c1d-81d8-966ffa428653",
           "settings": {
             "quiz_slug": "web-dev-course"
@@ -33,7 +33,7 @@
         }
       },
       "block_order": [
-        "theme_appext_development_quiz_JTayL3"
+        "theme_appext_development_quiz_rGDMNT"
       ],
       "settings": {
         "include_margins": true
