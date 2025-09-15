@@ -18,8 +18,14 @@
     },
     "17577825916b785148": {
       "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "17579589893846d233": {
+      "type": "apps",
       "blocks": {
-        "theme_appext_development_quiz_GpVzxy": {
+        "theme_appext_development_quiz_JTayL3": {
           "type": "shopify://apps/theme-appext-development/blocks/quiz/02c0cde5-0410-4c1d-81d8-966ffa428653",
           "settings": {
             "quiz_slug": "web-dev-course"
@@ -27,7 +33,7 @@
         }
       },
       "block_order": [
-        "theme_appext_development_quiz_GpVzxy"
+        "theme_appext_development_quiz_JTayL3"
       ],
       "settings": {
         "include_margins": true
@@ -36,6 +42,7 @@
   },
   "order": [
     "main",
-    "17577825916b785148"
+    "17577825916b785148",
+    "17579589893846d233"
   ]
 }
