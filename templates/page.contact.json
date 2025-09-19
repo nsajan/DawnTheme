@@ -30,7 +30,13 @@
           "settings": {
             "quiz_slug": "drivewise-course",
             "title": "Test course",
-            "subtitle": "FJSDKFDJSKAS"
+            "subtitle": "ACREDITED DRIVING COURSE",
+            "logo_text": "DW",
+            "show_progress": true,
+            "show_rich": true,
+            "auto_mark_forward": true,
+            "hero_ratio": "16/7",
+            "object_position": "center"
           }
         }
       },
