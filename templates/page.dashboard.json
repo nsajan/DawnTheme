@@ -18,23 +18,20 @@
     },
     "175839709519083626": {
       "type": "apps",
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "1759346169680f5196": {
+      "type": "apps",
       "blocks": {
-        "theme_appext_development_test_ifxfTG": {
-          "type": "shopify://apps/theme-appext-development/blocks/test/02c0cde5-0410-4c1d-81d8-966ffa428653",
-          "settings": {
-            "test_slug": "drivewise-final",
-            "title": "Final Test",
-            "subtitle": "20 randomized questions",
-            "logo_text": "DW",
-            "show_timer": true,
-            "allow_back_nav": true,
-            "review_on_pass": true,
-            "review_on_fail": false
-          }
+        "theme_appext_development_dashboard_RWtGzY": {
+          "type": "shopify://apps/theme-appext-development/blocks/dashboard/02c0cde5-0410-4c1d-81d8-966ffa428653",
+          "settings": {}
         }
       },
       "block_order": [
-        "theme_appext_development_test_ifxfTG"
+        "theme_appext_development_dashboard_RWtGzY"
       ],
       "settings": {
         "include_margins": true
@@ -43,6 +40,7 @@
   },
   "order": [
     "main",
-    "175839709519083626"
+    "175839709519083626",
+    "1759346169680f5196"
   ]
 }
