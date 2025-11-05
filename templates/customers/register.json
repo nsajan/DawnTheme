@@ -1,10 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
-      "type": "main-register"
+      "type": "main-register",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "custom_liquid_aMUB7M": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<script>\n(function () {\n  // Rulează doar pe /account/register\n  if (!/\\/account\\/register(?:\\?|$)/.test(location.pathname + location.search)) return;\n\n  const params = new URLSearchParams(location.search);\n  const token = params.get(\"token\");\n  if (!token) return; // dacă nu există token, nu facem nimic\n\n  // Caută formularul nativ Shopify\n  const form =\n    document.querySelector('form#create_customer') ||\n    document.querySelector('form[action*=\"/account\"]') ||\n    document.querySelector(\"form\");\n\n  if (!form) return;\n\n  // Endpointul tău Gadget\n  const ONBOARDING_URL = \"https://theme-appext--development.gadget.app/proxy/onboarding\";\n\n  // Ajutător pt. idempotency (token + email)\n  const makeIdempotencyKey = (t, e) => {\n    try { return btoa(`${t}|${(e||'').trim().toLowerCase()}`); } catch (_e) { return `${t}:${e}`; }\n  };\n\n  // Atașează o singură dată\n  if (form.dataset.lmsHooked === \"1\") return;\n  form.dataset.lmsHooked = \"1\";\n\n  form.addEventListener(\"submit\", function () {\n    try {\n      const first =\n        form.querySelector('input[name=\"customer[first_name]\"]')?.value?.trim() || \"\";\n      const last =\n        form.querySelector('input[name=\"customer[last_name]\"]')?.value?.trim() || \"\";\n      const email =\n        form.querySelector('input[name=\"customer[email]\"]')?.value?.trim() || \"\";\n\n      // Construiește payloadul\n      const payload = {\n        token,\n        firstName: first,\n        lastName: last,\n        email,\n        shop: \"{{ shop.permanent_domain }}\", // ex: ridemy.myshopify.com\n        source: \"register\",\n        at: new Date().toISOString(),\n        idempotencyKey: makeIdempotencyKey(token, email),\n      };\n\n      // Trimite în fundal, fără să blocheze submitul nativ\n      const json = JSON.stringify(payload);\n      const blob = new Blob([json], { type: \"application/json\" });\n\n      if (navigator.sendBeacon) {\n        navigator.sendBeacon(ONBOARDING_URL, blob);\n      } else {\n        fetch(ONBOARDING_URL, {\n          method: \"POST\",\n          headers: { \"Content-Type\": \"application/json\" },\n          body: json,\n          keepalive: true, // important la navigare imediat după submit\n        }).catch(() => {});\n      }\n    } catch (_e) {\n      // Intenționat: nu stricăm UX-ul dacă „tap”-ul eșuează\n    }\n  });\n})();\n</script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "custom_liquid_aMUB7M"
   ]
 }
