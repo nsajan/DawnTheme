@@ -15,9 +15,34 @@
         "padding_top": 28,
         "padding_bottom": 28
       }
+    },
+    "175839709519083626": {
+      "type": "apps",
+      "blocks": {
+        "theme_appext_development_test_ifxfTG": {
+          "type": "shopify://apps/theme-appext-development/blocks/test/02c0cde5-0410-4c1d-81d8-966ffa428653",
+          "settings": {
+            "test_slug": "testdmv",
+            "title": "Final Test",
+            "subtitle": "10 randomized questions",
+            "logo_text": "DW",
+            "show_timer": true,
+            "allow_back_nav": true,
+            "review_on_pass": true,
+            "review_on_fail": false
+          }
+        }
+      },
+      "block_order": [
+        "theme_appext_development_test_ifxfTG"
+      ],
+      "settings": {
+        "include_margins": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "175839709519083626"
   ]
 }
